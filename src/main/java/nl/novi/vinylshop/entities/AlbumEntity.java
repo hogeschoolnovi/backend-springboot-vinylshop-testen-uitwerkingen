@@ -2,6 +2,7 @@ package nl.novi.vinylshop.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,7 @@ public class AlbumEntity extends BaseEntity {
     private PublisherEntity publisher;
 
     @OneToMany(mappedBy = "album")
-    private List<StockEntity> stockItems;
+    private List<StockEntity> stockItems = new ArrayList<>();
 
 
     @ManyToMany()

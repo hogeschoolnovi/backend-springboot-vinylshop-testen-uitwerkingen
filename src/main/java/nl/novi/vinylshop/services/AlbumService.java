@@ -1,11 +1,14 @@
 package nl.novi.vinylshop.services;
 
 
-import jakarta.persistence.EntityNotFoundException;
 import nl.novi.vinylshop.dtos.album.AlbumExtendedResponseDTO;
 import nl.novi.vinylshop.dtos.album.AlbumRequestDTO;
 import nl.novi.vinylshop.dtos.album.AlbumResponseDTO;
-import nl.novi.vinylshop.entities.*;
+import nl.novi.vinylshop.entities.AlbumEntity;
+import nl.novi.vinylshop.entities.ArtistEntity;
+import nl.novi.vinylshop.entities.GenreEntity;
+import nl.novi.vinylshop.entities.PublisherEntity;
+import nl.novi.vinylshop.exceptions.RecordNotFoundException;
 import nl.novi.vinylshop.mappers.AlbumDTOMapper;
 import nl.novi.vinylshop.mappers.AlbumExtendedDTOMapper;
 import nl.novi.vinylshop.repositories.AlbumRepository;
@@ -46,7 +49,7 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public AlbumExtendedResponseDTO findAlbumById(Long id) throws EntityNotFoundException {
+    public AlbumExtendedResponseDTO findAlbumById(Long id)  {
         AlbumEntity albumEntity = getAlbumEntity(id);
         return albumExtendedDTOMapper.mapToDto(albumEntity);
     }
@@ -71,7 +74,7 @@ public class AlbumService {
     }
 
     @Transactional
-    public AlbumResponseDTO updateAlbum(Long id, AlbumRequestDTO albumModel) throws EntityNotFoundException {
+    public AlbumResponseDTO updateAlbum(Long id, AlbumRequestDTO albumModel)  {
         AlbumEntity existingAlbumEntity = getAlbumEntity(id);
 
         existingAlbumEntity.setTitle(albumModel.getTitle());
@@ -83,16 +86,16 @@ public class AlbumService {
     }
 
     private PublisherEntity getPublisherEntity(long publisherId) {
-        return publisherRepository.findById(publisherId).orElseThrow(() -> new EntityNotFoundException("publisher " + publisherId + " not found"));
+        return publisherRepository.findById(publisherId).orElseThrow(() -> new RecordNotFoundException("publisher " + publisherId + " not found"));
     }
 
     private GenreEntity getGenreEntity(long genreId) {
-        return genreRepository.findById(genreId).orElseThrow(() -> new EntityNotFoundException("genre " + genreId + " not found"));
+        return genreRepository.findById(genreId).orElseThrow(() -> new RecordNotFoundException("genre " + genreId + " not found"));
     }
 
     private AlbumEntity getAlbumEntity(Long id) {
         AlbumEntity existingAlbumEntity = albumRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Album " + id + " not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Album " + id + " not found"));
         return existingAlbumEntity;
     }
 
@@ -109,7 +112,7 @@ public class AlbumService {
     public void linkArtist(Long albumId, Long artistId) {
         AlbumEntity existingAlbumEntity = getAlbumEntity(albumId);
         ArtistEntity existingArtistEntity = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Artist " + artistId + " not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Artist " + artistId + " not found"));
         existingArtistEntity.getAlbums().add(existingAlbumEntity);
         existingAlbumEntity.getArtists().add(existingArtistEntity);
         albumRepository.save(existingAlbumEntity);
@@ -119,7 +122,7 @@ public class AlbumService {
     public void unlinkArtist(Long albumId, Long artistId) {
         AlbumEntity existingAlbumEntity = getAlbumEntity(albumId);
         ArtistEntity existingArtistEntity = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Artist " + artistId + " not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Artist " + artistId + " not found"));
         existingArtistEntity.getAlbums().remove(existingAlbumEntity);
         existingAlbumEntity.getArtists().remove(existingArtistEntity);
         albumRepository.save(existingAlbumEntity);

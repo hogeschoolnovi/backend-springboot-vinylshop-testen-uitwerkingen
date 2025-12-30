@@ -1,10 +1,11 @@
 package nl.novi.vinylshop.services;
 
-import jakarta.persistence.EntityNotFoundException;
+
 import nl.novi.vinylshop.dtos.genre.GenreRequestDTO;
 import nl.novi.vinylshop.dtos.genre.GenreResponseDTO;
 import nl.novi.vinylshop.entities.AlbumEntity;
 import nl.novi.vinylshop.entities.GenreEntity;
+import nl.novi.vinylshop.exceptions.RecordNotFoundException;
 import nl.novi.vinylshop.mappers.GenreDTOMapper;
 import nl.novi.vinylshop.repositories.AlbumRepository;
 import nl.novi.vinylshop.repositories.GenreRepository;
@@ -33,8 +34,8 @@ public class GenreService {
         return genreDTOMapper.mapToDto(genreRepository.findAll());
     }
 
-    public GenreResponseDTO findGenreById(Long id) throws EntityNotFoundException {
-        nl.novi.vinylshop.entities.GenreEntity genreEntity = getGenreEntity(id);
+    public GenreResponseDTO findGenreById(Long id)  {
+        GenreEntity genreEntity = getGenreEntity(id);
         return genreDTOMapper.mapToDto(genreEntity);
     }
 
@@ -44,7 +45,7 @@ public class GenreService {
         return genreDTOMapper.mapToDto(genreEntity);
     }
 
-    public GenreResponseDTO updateGenre(Long id, GenreRequestDTO requestDto) throws EntityNotFoundException {
+    public GenreResponseDTO updateGenre(Long id, GenreRequestDTO requestDto)  {
         GenreEntity existingGenreEntity = getGenreEntity(id);
 
         existingGenreEntity.setName(requestDto.getName());
@@ -56,7 +57,7 @@ public class GenreService {
 
     private GenreEntity getGenreEntity(Long id) {
         GenreEntity existingGenreEntity = genreRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Genre " + id +" not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Genre " + id +" not found"));
         return existingGenreEntity;
     }
 
@@ -68,14 +69,15 @@ public class GenreService {
         genreRepository.deleteById(id);
     }
 
-    private GenreEntity getGenreById(Long id){
-        Optional<GenreEntity> genreEntityOptional = genreRepository.findById(id);
-
-//        Een if-statement waar je expliciet de Optional.isPresent() of Optional.isEmpty() checkt, is één variant om met de optional om te gaan.
-        if(genreEntityOptional.isPresent()){
-            return genreEntityOptional.get();
-        } else {
-            return null;
-        }
-    }
+//    //    Deze methode wordt niet gebruikt, maar dienst als alternatief voorbeeld voor de "getGenreEntity"-methode
+//    private GenreEntity getGenreById(Long id){
+//        Optional<GenreEntity> genreEntityOptional = genreRepository.findById(id);
+//
+////        Een if-statement waar je expliciet de Optional.isPresent() of Optional.isEmpty() checkt, is één variant om met de optional om te gaan.
+//        if(genreEntityOptional.isPresent()){
+//            return genreEntityOptional.get();
+//        } else {
+//            throw new RecordNotFoundException("Genre " + id +" not found");
+//        }
+//    }
 }

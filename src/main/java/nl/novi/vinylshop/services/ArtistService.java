@@ -1,9 +1,10 @@
 package nl.novi.vinylshop.services;
 
-import jakarta.persistence.EntityNotFoundException;
+
 import nl.novi.vinylshop.dtos.artist.ArtistRequestDTO;
 import nl.novi.vinylshop.dtos.artist.ArtistResponseDTO;
 import nl.novi.vinylshop.entities.ArtistEntity;
+import nl.novi.vinylshop.exceptions.RecordNotFoundException;
 import nl.novi.vinylshop.mappers.ArtistDTOMapper;
 import nl.novi.vinylshop.repositories.ArtistRepository;
 import org.springframework.stereotype.Service;
@@ -29,14 +30,14 @@ public class ArtistService {
     }
 
     @Transactional(readOnly = true)
-    public ArtistResponseDTO findArtistById(Long id) throws EntityNotFoundException {
+    public ArtistResponseDTO findArtistById(Long id)  {
         ArtistEntity artistEntity = getArtistEntity(id);
         return artistDTOMapper.mapToDto(artistEntity);
     }
 
     private ArtistEntity getArtistEntity(Long id) {
         ArtistEntity artistEntity = artistRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Artist " + id + " not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Artist " + id + " not found"));
         return artistEntity;
     }
 
@@ -48,7 +49,7 @@ public class ArtistService {
     }
 
     @Transactional
-    public ArtistResponseDTO updateArtist(Long id, ArtistRequestDTO artistModel) throws EntityNotFoundException {
+    public ArtistResponseDTO updateArtist(Long id, ArtistRequestDTO artistModel)  {
         ArtistEntity existingArtistEntity = getArtistEntity(id);
 
         existingArtistEntity.setName(artistModel.getName());

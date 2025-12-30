@@ -1,12 +1,9 @@
 package nl.novi.vinylshop.controllers;
 
-
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import nl.novi.vinylshop.dtos.publisher.PublisherRequestDTO;
 import nl.novi.vinylshop.dtos.publisher.PublisherResponseDTO;
 import nl.novi.vinylshop.helpers.UrlHelper;
-import nl.novi.vinylshop.mappers.PublisherDTOMapper;
 import nl.novi.vinylshop.services.PublisherService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +23,10 @@ import java.util.List;
 public class PublisherController {
 
     private final PublisherService publisherService;
-    private final PublisherDTOMapper publisherDTOMapper;
     private final UrlHelper urlHelper;
 
-    public PublisherController(PublisherService publisherService, PublisherDTOMapper publisherDTOMapper, UrlHelper urlHelper) {
+    public PublisherController(PublisherService publisherService, UrlHelper urlHelper) {
         this.publisherService = publisherService;
-        this.publisherDTOMapper = publisherDTOMapper;
         this.urlHelper = urlHelper;
 
     }
@@ -42,7 +37,7 @@ public class PublisherController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PublisherResponseDTO> getPublisherById(@PathVariable Long id) throws EntityNotFoundException {
+    public ResponseEntity<PublisherResponseDTO> getPublisherById(@PathVariable Long id)  {
         PublisherResponseDTO publisher = publisherService.findPublisherById(id);
         return new ResponseEntity<>(publisher, HttpStatus.OK);
     }
@@ -54,7 +49,7 @@ public class PublisherController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PublisherResponseDTO> updatePublisher(@PathVariable Long id, @RequestBody  @Valid PublisherRequestDTO publisherRequestDTO) throws EntityNotFoundException {
+    public ResponseEntity<PublisherResponseDTO> updatePublisher(@PathVariable Long id, @RequestBody  @Valid PublisherRequestDTO publisherRequestDTO)  {
         PublisherResponseDTO updatedPublisher = publisherService.updatePublisher(id, publisherRequestDTO);
         return new ResponseEntity<>(updatedPublisher, HttpStatus.OK);
     }

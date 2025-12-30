@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import nl.novi.vinylshop.dtos.stock.StockRequestDTO;
 import nl.novi.vinylshop.dtos.stock.StockResponseDTO;
 import nl.novi.vinylshop.helpers.UrlHelper;
-import nl.novi.vinylshop.mappers.StockDTOMapper;
 import nl.novi.vinylshop.services.StockService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +16,11 @@ import java.util.List;
 public class StockController {
 
     private final StockService stockService;
-    private final StockDTOMapper stockMapper;
     private final UrlHelper urlHelper;
 
 
-    public StockController(StockService stockService, StockDTOMapper stockMapper,UrlHelper urlHelper) {
+    public StockController(StockService stockService, UrlHelper urlHelper) {
         this.stockService = stockService;
-        this.stockMapper = stockMapper;
         this.urlHelper = urlHelper;
     }
 

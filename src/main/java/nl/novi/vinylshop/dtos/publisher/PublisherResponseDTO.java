@@ -1,5 +1,7 @@
 package nl.novi.vinylshop.dtos.publisher;
 
+import java.util.Objects;
+
 public class PublisherResponseDTO {
 
     private long id;
@@ -37,5 +39,17 @@ public class PublisherResponseDTO {
 
     public void setContactDetails(String contactDetails) {
         this.contactDetails = contactDetails;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        PublisherResponseDTO that = (PublisherResponseDTO) o;
+        return Objects.equals(getName(), that.getName()) && Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getContactDetails(), that.getContactDetails());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getAddress(), getContactDetails());
     }
 }

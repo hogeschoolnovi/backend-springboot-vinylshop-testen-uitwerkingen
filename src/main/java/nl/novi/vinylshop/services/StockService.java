@@ -1,11 +1,11 @@
 package nl.novi.vinylshop.services;
 
 
-import jakarta.persistence.EntityNotFoundException;
 import nl.novi.vinylshop.dtos.stock.StockRequestDTO;
 import nl.novi.vinylshop.dtos.stock.StockResponseDTO;
 import nl.novi.vinylshop.entities.AlbumEntity;
 import nl.novi.vinylshop.entities.StockEntity;
+import nl.novi.vinylshop.exceptions.RecordNotFoundException;
 import nl.novi.vinylshop.mappers.StockDTOMapper;
 import nl.novi.vinylshop.repositories.StockRepository;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class StockService {
     @Transactional(readOnly = true)
     public StockResponseDTO findStockById(Long id) {
         StockEntity stockEntity = stockRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Stock " + id + " not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Stock " + id + " not found"));
         return stockDTOMapper.mapToDto(stockEntity);
     }
 
@@ -45,32 +45,32 @@ public class StockService {
 
     @Transactional
     //nodig om fouten te voorkomen mocht door cascading meerdere entiteiten opgeslagen worden samen met deze entiteit.
-    public StockResponseDTO createStock(Long albumId, StockRequestDTO stockModel) {
-        StockEntity stockEntity = stockDTOMapper.mapToEntity(stockModel);
+    public StockResponseDTO createStock(Long albumId, StockRequestDTO stockDto) {
+        StockEntity stockEntity = stockDTOMapper.mapToEntity(stockDto);
         stockEntity.setAlbum(new AlbumEntity(albumId));
         stockEntity = stockRepository.save(stockEntity);
         return stockDTOMapper.mapToDto(stockEntity);
     }
 
     @Transactional
-    public StockResponseDTO updateStock(Long albumId, Long id, StockRequestDTO stockModel) {
+    public StockResponseDTO updateStock(Long albumId, Long id, StockRequestDTO stockDto) {
         StockEntity stockEntity = getStockEntity(albumId, id);
-        stockEntity.setCondition(stockModel.getCondition());
-        stockEntity.setPrice(stockModel.getPrice());
+        stockEntity.setCondition(stockDto.getCondition());
+        stockEntity.setPrice(stockDto.getPrice());
         stockEntity = stockRepository.save(stockEntity);
         return stockDTOMapper.mapToDto(stockEntity);
     }
 
     private StockEntity getStockEntity(Long albumId, Long id) {
         StockEntity stockEntity = getByIdAndAlbumId(albumId, id)
-                .orElseThrow(() -> new EntityNotFoundException("Stock " + id + " not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Stock " + id + " not found"));
         return stockEntity;
     }
 
     @Transactional
     public StockResponseDTO findStock(Long albumId, Long id) {
         StockEntity stockEntity = getByIdAndAlbumId(albumId, id)
-                .orElseThrow(() -> new EntityNotFoundException("Stock " + id + " not found in album " + albumId));
+                .orElseThrow(() -> new RecordNotFoundException("Stock " + id + " not found in album " + albumId));
         return stockDTOMapper.mapToDto(stockEntity);
     }
 
