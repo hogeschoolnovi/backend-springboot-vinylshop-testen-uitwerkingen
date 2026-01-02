@@ -4,12 +4,14 @@ package nl.novi.vinylshop.mappers;
 import nl.novi.vinylshop.dtos.album.AlbumRequestDTO;
 import nl.novi.vinylshop.dtos.album.AlbumResponseDTO;
 import nl.novi.vinylshop.entities.AlbumEntity;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Primary
 public class AlbumDTOMapper implements DTOMapper<AlbumResponseDTO, AlbumRequestDTO, AlbumEntity> {
 
     private final PublisherDTOMapper publisherDtoMapper;
