@@ -1,4 +1,4 @@
-package nl.novi.vinylshop;
+package nl.novi.vinylshop.services;
 
 import nl.novi.vinylshop.dtos.album.AlbumExtendedResponseDTO;
 import nl.novi.vinylshop.dtos.album.AlbumRequestDTO;
@@ -9,7 +9,6 @@ import nl.novi.vinylshop.mappers.AlbumDTOMapper;
 import nl.novi.vinylshop.mappers.AlbumExtendedDTOMapper;
 import nl.novi.vinylshop.repositories.*;
 
-import nl.novi.vinylshop.services.AlbumService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

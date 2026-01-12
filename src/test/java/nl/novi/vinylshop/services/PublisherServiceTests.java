@@ -1,4 +1,4 @@
-package nl.novi.vinylshop;
+package nl.novi.vinylshop.services;
 
 
 import nl.novi.vinylshop.dtos.publisher.PublisherRequestDTO;
@@ -9,7 +9,6 @@ import nl.novi.vinylshop.exceptions.RecordNotFoundException;
 import nl.novi.vinylshop.mappers.PublisherDTOMapper;
 import nl.novi.vinylshop.repositories.AlbumRepository;
 import nl.novi.vinylshop.repositories.PublisherRepository;
-import nl.novi.vinylshop.services.PublisherService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

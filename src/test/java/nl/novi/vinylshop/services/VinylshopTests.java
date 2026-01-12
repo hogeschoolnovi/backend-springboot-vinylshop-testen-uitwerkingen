@@ -1,4 +1,4 @@
-package nl.novi.vinylshop;
+package nl.novi.vinylshop.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
